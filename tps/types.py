@@ -26,7 +26,7 @@ class SSMLTag(str, Enum):
     s = "s"
     sub = "sub"
     prosody = "prosody"
-
+    say_as = "say-as"
 
     @classmethod
     def nested(cls, value):

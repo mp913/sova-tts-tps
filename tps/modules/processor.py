@@ -104,7 +104,6 @@ class Processor:
 
         return " ".join(processed) if return_string else processed
 
-
     def generate_text(self, text: Union[str, list], keep_delimiters: bool=False,
                       **kwargs) -> Iterator[Union[str, Pause]]:
         """
@@ -145,7 +144,6 @@ class Processor:
             else:
                 continue
 
-
     def _calc_weight(self, text):
         """
         Calculates weight of the each unit. For example, we do not want to take the shield symbols into account,
@@ -165,7 +163,6 @@ class Processor:
 
         return weight
 
-
     def _distribute_parts(self, parts, delimiter):
         """
         Auxiliary function for Processor.split_to_units.
@@ -182,7 +179,6 @@ class Processor:
             delimiter.join(parts[len(parts) // 2:])
         ]
         return parts_grouped
-
 
     def split_to_units(self, text: str, max_unit_length: int, keep_delimiter: bool=False) -> list:
         """
@@ -221,7 +217,6 @@ class Processor:
 
         return parts_grouped
 
-
     @staticmethod
     def split_to_sentences(text: str, keep_delimiters: bool=False, language: str="russian") -> list:
         """
@@ -243,7 +238,6 @@ class Processor:
 
         return parts
 
-
     @staticmethod
     def split_to_words(text: str) -> list:
         """
@@ -254,7 +248,6 @@ class Processor:
         :return: list
         """
         return word_tokenize(text)
-
 
     @staticmethod
     def join_words(words: list) -> str:

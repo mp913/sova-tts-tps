@@ -1,6 +1,6 @@
 from xml.etree import ElementTree as ET
 
-from tps.modules.ssml.elements import Text, Pause
+from tps.modules.ssml.elements import Text, Pause, SayAs
 from tps.types import SSMLTag
 from tps.utils.cleaners import collapse_whitespace
 
@@ -24,6 +24,8 @@ def parse_ssml_text(text):
                 optimized_seq[-1] = max(optimized_seq[-1], elem, key=lambda pause: pause.milliseconds)
             else:
                 optimized_seq.append(elem)
+        elif isinstance(elem, SayAs):
+            optimized_seq.append(elem)
 
     return optimized_seq
 
@@ -75,12 +77,16 @@ def _walk_ssml_elem(elem, ancestor=None):
         sequence.append(Pause(**elem.attrib))
     elif elem.tag == SSMLTag.sub:
         body.update_value(elem.attrib["alias"])
-    elif elem.tag == SSMLTag.phoneme:
-        pass
+    elif elem.tag == SSMLTag.say_as:
+        sequence.append(SayAs(interpret_as=elem.attrib.get('interpret-as', ''),
+                              text=elem.text))
     else:
         raise KeyError
 
-    if not body.is_empty:
+    if elem.tag in [SSMLTag.say_as] and ancestor is not None:
+        sequence[-1].inherit(ancestor)
+
+    if not body.is_empty and elem.tag != SSMLTag.say_as:
         sequence.append(body)
 
     if not tail.is_empty:
